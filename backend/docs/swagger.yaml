@@ -1,0 +1,641 @@
+basePath: /api/v1
+definitions:
+  controllers.Queue:
+    properties:
+      dental:
+        type: string
+      dentist:
+        type: integer
+      employee:
+        type: integer
+      patient:
+        type: integer
+      queueTime:
+        type: string
+    type: object
+  ent.Dentist:
+    properties:
+      dentist_email:
+        description: DentistEmail holds the value of the "dentist_email" field.
+        type: string
+      dentist_name:
+        description: DentistName holds the value of the "dentist_name" field.
+        type: string
+      dentist_phone:
+        description: DentistPhone holds the value of the "dentist_phone" field.
+        type: integer
+      edges:
+        $ref: '#/definitions/ent.DentistEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the DentistQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.DentistEdges:
+    properties:
+      queue:
+        description: Queue holds the value of the queue edge.
+        items:
+          $ref: '#/definitions/ent.Queue'
+        type: array
+    type: object
+  ent.Employee:
+    properties:
+      edges:
+        $ref: '#/definitions/ent.EmployeeEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the EmployeeQuery when eager-loading is set.
+        type: object
+      employee_email:
+        description: EmployeeEmail holds the value of the "employee_email" field.
+        type: string
+      employee_name:
+        description: EmployeeName holds the value of the "employee_name" field.
+        type: string
+      employee_password:
+        description: EmployeePassword holds the value of the "employee_password" field.
+        type: string
+      employee_phone:
+        description: EmployeePhone holds the value of the "employee_phone" field.
+        type: integer
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.EmployeeEdges:
+    properties:
+      queue:
+        description: Queue holds the value of the queue edge.
+        items:
+          $ref: '#/definitions/ent.Queue'
+        type: array
+    type: object
+  ent.Patient:
+    properties:
+      edges:
+        $ref: '#/definitions/ent.PatientEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PatientQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      patient_age:
+        description: PatientAge holds the value of the "patient_age" field.
+        type: integer
+      patient_gender:
+        description: PatientGender holds the value of the "patient_gender" field.
+        type: string
+      patient_name:
+        description: PatientName holds the value of the "patient_name" field.
+        type: string
+      patient_phone:
+        description: PatientPhone holds the value of the "patient_phone" field.
+        type: integer
+    type: object
+  ent.PatientEdges:
+    properties:
+      queue:
+        description: Queue holds the value of the queue edge.
+        items:
+          $ref: '#/definitions/ent.Queue'
+        type: array
+    type: object
+  ent.Queue:
+    properties:
+      dental:
+        description: Dental holds the value of the "dental" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.QueueEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the QueueQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      queue_time:
+        description: QueueTime holds the value of the "queue_time" field.
+        type: string
+    type: object
+  ent.QueueEdges:
+    properties:
+      dentist:
+        $ref: '#/definitions/ent.Dentist'
+        description: Dentist holds the value of the dentist edge.
+        type: object
+      employee:
+        $ref: '#/definitions/ent.Employee'
+        description: Employee holds the value of the employee edge.
+        type: object
+      patient:
+        $ref: '#/definitions/ent.Patient'
+        description: Patient holds the value of the patient edge.
+        type: object
+    type: object
+  gin.H:
+    additionalProperties: true
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for SUT SE 2563
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: SUT SA Example API
+  version: "1.0"
+paths:
+  /dentist/{id}:
+    delete:
+      description: get dentist by ID
+      operationId: delete-dentist
+      parameters:
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a dentist entity by ID
+  /dentists:
+    get:
+      description: list dentist entities
+      operationId: list-dentist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Dentist'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List dentist entities
+    post:
+      consumes:
+      - application/json
+      description: Create dentist
+      operationId: create-dentist
+      parameters:
+      - description: Dentist entity
+        in: body
+        name: dentist
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Dentist'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Dentist'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create dentist
+  /dentists/{id}:
+    get:
+      description: get dentist by ID
+      operationId: get-dentist
+      parameters:
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Dentist'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a dentist entity by ID
+  /employee/{id}:
+    delete:
+      description: get employee by ID
+      operationId: delete-employee
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a employee entity by ID
+  /employees:
+    get:
+      description: list employee entities
+      operationId: list-employee
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Employee'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List employee entities
+    post:
+      consumes:
+      - application/json
+      description: Create employee
+      operationId: create-employee
+      parameters:
+      - description: Employee entity
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Employee'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Employee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create employee
+  /employees/{id}:
+    get:
+      description: get employee by ID
+      operationId: get-employee
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Employee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a employee entity by ID
+  /patient/{id}:
+    delete:
+      description: get patient by ID
+      operationId: delete-patient
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a patient entity by ID
+  /patients:
+    get:
+      description: list patient entities
+      operationId: list-patient
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Patient'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List patient entities
+    post:
+      consumes:
+      - application/json
+      description: Create patient
+      operationId: create-patient
+      parameters:
+      - description: Patient entity
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Patient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Patient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create patient
+  /patients/{id}:
+    get:
+      description: get patient by ID
+      operationId: get-patient
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Patient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a patient entity by ID
+  /queues:
+    get:
+      description: list queue entities
+      operationId: list-queue
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Queue'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List queue entities
+    post:
+      consumes:
+      - application/json
+      description: Create queue
+      operationId: create-queue
+      parameters:
+      - description: Queue entity
+        in: body
+        name: queue
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Queue'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Queue'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create queue
+  /queues/{id}:
+    delete:
+      description: get queue by ID
+      operationId: delete-queue
+      parameters:
+      - description: Queue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a queue entity by ID
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+  OAuth2AccessCode:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: accessCode
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Application:
+    flow: application
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Implicit:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: implicit
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    type: oauth2
+  OAuth2Password:
+    flow: password
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      read: ' Grants read access'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+swagger: "2.0"
